@@ -31,7 +31,7 @@ app.register_blueprint(video_generator_bp, url_prefix='/api')
 app.register_blueprint(admin_bp, url_prefix='/')  # Admin at root like before
 
 # uncomment if you need to use database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 with app.app_context():
