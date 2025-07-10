@@ -1,0 +1,206 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}System Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- System Status Cards -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title text-muted">Google Drive</h6>
+                        <h4 class="mb-0">
+                            {% if status.google_drive_configured %}
+                                <span class="badge bg-success status-badge">
+                                    <i class="fas fa-check"></i> Configured
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger status-badge">
+                                    <i class="fas fa-times"></i> Not Configured
+                                </span>
+                            {% endif %}
+                        </h4>
+                    </div>
+                    <div class="text-primary">
+                        <i class="fab fa-google-drive fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title text-muted">Google Auth</h6>
+                        <h4 class="mb-0">
+                            {% if status.google_auth_connected %}
+                                <span class="badge bg-success status-badge">
+                                    <i class="fas fa-check"></i> Connected
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning status-badge">
+                                    <i class="fas fa-exclamation"></i> Not Connected
+                                </span>
+                            {% endif %}
+                        </h4>
+                    </div>
+                    <div class="text-success">
+                        <i class="fas fa-key fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title text-muted">n8n Webhook</h6>
+                        <h4 class="mb-0">
+                            {% if status.n8n_webhook_configured %}
+                                <span class="badge bg-success status-badge">
+                                    <i class="fas fa-check"></i> Configured
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger status-badge">
+                                    <i class="fas fa-times"></i> Not Configured
+                                </span>
+                            {% endif %}
+                        </h4>
+                    </div>
+                    <div class="text-info">
+                        <i class="fas fa-webhook fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title text-muted">System Logs</h6>
+                        <h4 class="mb-0">{{ status.total_logs }}</h4>
+                        <small class="text-muted">Total entries</small>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="fas fa-list-alt fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt"></i> Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="d-grid">
+                            <a href="{{ url_for('admin.google_auth_page') }}" class="btn btn-outline-primary">
+                                <i class="fab fa-google-drive"></i> Manage Google Drive
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="d-grid">
+                            <a href="{{ url_for('admin.webhook_management') }}" class="btn btn-outline-info">
+                                <i class="fas fa-webhook"></i> Configure Webhook
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="d-grid">
+                            <a href="{{ url_for('admin.view_logs') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-list-alt"></i> View Logs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Information -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> System Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Configuration Status</h6>
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-circle text-{{ 'success' if status.google_drive_configured else 'danger' }}"></i>
+                                Google Drive Service: {{ 'Available' if status.google_drive_configured else 'Not Available' }}
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-{{ 'success' if status.google_auth_connected else 'warning' }}"></i>
+                                Google Authentication: {{ 'Connected' if status.google_auth_connected else 'Not Connected' }}
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-{{ 'success' if status.n8n_webhook_configured else 'danger' }}"></i>
+                                n8n Webhook: {{ 'Configured' if status.n8n_webhook_configured else 'Not Configured' }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Current Configuration</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Webhook URL:</strong> 
+                                {% if status.n8n_webhook_url %}
+                                    <code>{{ status.n8n_webhook_url[:50] }}{% if status.n8n_webhook_url|length > 50 %}...{% endif %}</code>
+                                {% else %}
+                                    <span class="text-muted">Not configured</span>
+                                {% endif %}
+                            </li>
+                            <li><strong>Frontend URL:</strong> <a href="/" target="_blank">{{ request.host_url }}</a></li>
+                            <li><strong>Admin Panel:</strong> <code>{{ request.host_url }}admin</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-refresh status every 30 seconds
+setInterval(function() {
+    fetch('/admin/api/status')
+        .then(response => response.json())
+        .then(data => {
+            // Update status indicators if needed
+            console.log('Status updated:', data);
+        })
+        .catch(error => console.error('Error fetching status:', error));
+}, 30000);
+</script>
+{% endblock %}
+

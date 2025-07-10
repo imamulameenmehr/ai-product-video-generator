@@ -1,0 +1,168 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Google Drive Authentication{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4">Google Drive Authentication</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Google Drive Connection -->
+        <div class="col-lg-8 col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-cloud me-2"></i>
+                    <h5 class="mb-0">Google Drive Connection</h5>
+                </div>
+                <div class="card-body">
+                    {% if auth_status %}
+                        <div class="alert alert-success" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>Connected!</strong> Google Drive is successfully connected and ready for file uploads.
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Connection Status:</strong> 
+                            <span class="badge bg-success">Connected</span>
+                        </div>
+                        
+                        <p class="text-muted mb-3">
+                            Your Google account is connected and the system can now automatically upload files to Google Drive.
+                        </p>
+                        
+                        <form method="POST" action="{{ url_for('admin.google_disconnect') }}" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="fas fa-unlink me-2"></i>Disconnect Google Drive
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Not Connected!</strong> Please connect to Google Drive to enable file uploads.
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Connection Status:</strong> 
+                            <span class="badge bg-warning">Not Connected</span>
+                        </div>
+                        
+                        <p class="text-muted mb-3">
+                            Connect your Google account to enable automatic file uploads to Google Drive.
+                        </p>
+                        
+                        {% if auth_url %}
+                            <a href="{{ url_for('admin.google_connect') }}" class="btn btn-primary btn-lg">
+                                <i class="fab fa-google me-2"></i>Connect Google Drive
+                            </a>
+                        {% else %}
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                <strong>Configuration Error!</strong> Unable to generate Google OAuth URL. Please check your credentials configuration.
+                            </div>
+                            
+                            <button class="btn btn-primary btn-lg" disabled>
+                                <i class="fab fa-google me-2"></i>Connect Google Drive
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Setup Instructions -->
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <h5 class="mb-0">Setup Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="fw-bold">Google Console Setup:</h6>
+                    <ol class="small">
+                        <li>Go to <a href="https://console.cloud.google.com/" target="_blank" class="text-decoration-none">Google Cloud Console</a></li>
+                        <li>Navigate to APIs & Services > Credentials</li>
+                        <li>Add this redirect URI to your OAuth 2.0 Client:
+                            <div class="mt-2">
+                                <code class="bg-light p-2 d-block rounded small text-break">{{ redirect_uri }}</code>
+                            </div>
+                        </li>
+                        <li>Save the changes</li>
+                        <li>Click "Connect Google Drive" above</li>
+                    </ol>
+                    
+                    <h6 class="fw-bold mt-3">Required Scopes:</h6>
+                    <ul class="small">
+                        <li>Google Drive API</li>
+                        <li>File upload permissions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Configuration -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-cog me-2"></i>
+                    <h5 class="mb-0">Configuration</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Environment Variables:</h6>
+                            <ul class="small text-muted">
+                                <li><code>GOOGLE_DRIVE_CREDENTIALS_FILE</code></li>
+                                <li><code>GOOGLE_DRIVE_FOLDER_ID</code></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Current Redirect URI:</h6>
+                            <code class="bg-light p-2 d-block rounded small text-break">{{ redirect_uri }}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Additional responsive styles */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .text-break {
+        word-break: break-all;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .h3 {
+        font-size: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+

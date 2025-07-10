@@ -1,0 +1,169 @@
+{% extends "admin/base.html" %}
+
+{% block title %}n8n Webhook Management{% endblock %}
+{% block page_title %}n8n Webhook Configuration{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-webhook"></i> Webhook Configuration
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.update_webhook') }}">
+                    <div class="mb-3">
+                        <label for="webhook_url" class="form-label">n8n Webhook URL</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="webhook_url" 
+                               name="webhook_url" 
+                               value="{{ webhook_url }}" 
+                               placeholder="https://your-n8n-instance.com/webhook/video-generator">
+                        <div class="form-text">
+                            Enter the complete webhook URL from your n8n workflow.
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Webhook
+                        </button>
+                        
+                        {% if webhook_url %}
+                        <button type="button" class="btn btn-outline-success" onclick="testWebhook()">
+                            <i class="fas fa-play"></i> Test Webhook
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Webhook Status -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Webhook Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Current Status:</h6>
+                        {% if webhook_url %}
+                            <span class="badge bg-success">
+                                <i class="fas fa-check"></i> Configured
+                            </span>
+                            <p class="mt-2 mb-0">
+                                <strong>URL:</strong><br>
+                                <code>{{ webhook_url }}</code>
+                            </p>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                <i class="fas fa-times"></i> Not Configured
+                            </span>
+                            <p class="mt-2 mb-0 text-muted">
+                                No webhook URL configured. Please enter your n8n webhook URL above.
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Test Results:</h6>
+                        <div id="webhookTestResult">
+                            <span class="text-muted">No tests performed yet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-question-circle"></i> Setup Guide
+                </h6>
+            </div>
+            <div class="card-body">
+                <h6>n8n Workflow Setup:</h6>
+                <ol class="small">
+                    <li>Import the provided n8n workflow JSON</li>
+                    <li>Configure your API keys (PIAPI, ElevenLabs)</li>
+                    <li>Activate the workflow</li>
+                    <li>Copy the webhook URL</li>
+                    <li>Paste it in the form on the left</li>
+                </ol>
+                
+                <hr>
+                
+                <h6>Webhook Payload:</h6>
+                <p class="small">The system sends this data structure:</p>
+                <pre class="small bg-light p-2"><code>{
+  "productImageUrl": "...",
+  "avatar": "...",
+  "avatarImageUrl": "...",
+  "productDescription": "...",
+  "avatarScript": "...",
+  "email": "...",
+  "timestamp": "...",
+  "requestId": "..."
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-tools"></i> Troubleshooting
+                </h6>
+            </div>
+            <div class="card-body">
+                <h6>Common Issues:</h6>
+                <ul class="small">
+                    <li><strong>404 Error:</strong> Check webhook URL</li>
+                    <li><strong>Timeout:</strong> n8n workflow not active</li>
+                    <li><strong>500 Error:</strong> Workflow configuration issue</li>
+                </ul>
+                
+                <h6 class="mt-3">Environment Variable:</h6>
+                <code class="small">N8N_WEBHOOK_URL</code>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function testWebhook() {
+    const resultDiv = document.getElementById('webhookTestResult');
+    resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Testing webhook...';
+    
+    fetch('{{ url_for("admin.test_webhook") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then(data => {
+        // Reload page to show flash messages
+        window.location.reload();
+    })
+    .catch(error => {
+        resultDiv.innerHTML = '<span class="text-danger"><i class="fas fa-times"></i> Test failed</span>';
+        console.error('Error:', error);
+    });
+}
+</script>
+{% endblock %}
+

@@ -1,0 +1,152 @@
+{% extends "admin/base.html" %}
+
+{% block title %}System Logs{% endblock %}
+{% block page_title %}System Logs{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list-alt"></i> System Logs
+                    </h5>
+                    <div class="d-flex gap-2">
+                        <form method="POST" action="{{ url_for('admin.clear_logs') }}" class="d-inline">
+                            <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                    onclick="return confirm('Are you sure you want to clear all logs?')">
+                                <i class="fas fa-trash"></i> Clear Logs
+                            </button>
+                        </form>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="refreshLogs()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Filters -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="levelFilter" class="form-label">Filter by Level:</label>
+                        <select class="form-select" id="levelFilter" onchange="filterLogs()">
+                            <option value="ALL" {% if current_filter == 'ALL' %}selected{% endif %}>All Levels</option>
+                            <option value="INFO" {% if current_filter == 'INFO' %}selected{% endif %}>Info</option>
+                            <option value="SUCCESS" {% if current_filter == 'SUCCESS' %}selected{% endif %}>Success</option>
+                            <option value="WARNING" {% if current_filter == 'WARNING' %}selected{% endif %}>Warning</option>
+                            <option value="ERROR" {% if current_filter == 'ERROR' %}selected{% endif %}>Error</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="limitFilter" class="form-label">Show Last:</label>
+                        <select class="form-select" id="limitFilter" onchange="filterLogs()">
+                            <option value="25" {% if current_limit == 25 %}selected{% endif %}>25 entries</option>
+                            <option value="50" {% if current_limit == 50 %}selected{% endif %}>50 entries</option>
+                            <option value="100" {% if current_limit == 100 %}selected{% endif %}>100 entries</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Log Entries -->
+                <div class="log-container" style="max-height: 600px; overflow-y: auto;">
+                    {% if logs %}
+                        {% for log in logs %}
+                        <div class="log-entry {{ log.level }} p-3 mb-2 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="badge bg-{{ 'info' if log.level == 'INFO' else 'success' if log.level == 'SUCCESS' else 'warning' if log.level == 'WARNING' else 'danger' }} me-2">
+                                            {{ log.level }}
+                                        </span>
+                                        <small class="text-muted">{{ log.timestamp }}</small>
+                                    </div>
+                                    <div class="log-message">
+                                        {{ log.message }}
+                                    </div>
+                                    {% if log.details %}
+                                    <div class="log-details mt-2">
+                                        <button class="btn btn-sm btn-outline-secondary" type="button" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#details-{{ loop.index }}" 
+                                                aria-expanded="false">
+                                            <i class="fas fa-chevron-down"></i> Details
+                                        </button>
+                                        <div class="collapse mt-2" id="details-{{ loop.index }}">
+                                            <pre class="small bg-white p-2 border rounded"><code>{{ log.details | tojson(indent=2) }}</code></pre>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No logs found</h5>
+                            <p class="text-muted">No log entries match the current filter criteria.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Log Statistics -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-chart-bar"></i> Log Statistics
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <h4 class="text-info">{{ logs | selectattr('level', 'equalto', 'INFO') | list | length }}</h4>
+                        <small class="text-muted">Info</small>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <h4 class="text-success">{{ logs | selectattr('level', 'equalto', 'SUCCESS') | list | length }}</h4>
+                        <small class="text-muted">Success</small>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <h4 class="text-warning">{{ logs | selectattr('level', 'equalto', 'WARNING') | list | length }}</h4>
+                        <small class="text-muted">Warning</small>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <h4 class="text-danger">{{ logs | selectattr('level', 'equalto', 'ERROR') | list | length }}</h4>
+                        <small class="text-muted">Error</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterLogs() {
+    const level = document.getElementById('levelFilter').value;
+    const limit = document.getElementById('limitFilter').value;
+    
+    const url = new URL(window.location);
+    url.searchParams.set('level', level);
+    url.searchParams.set('limit', limit);
+    
+    window.location.href = url.toString();
+}
+
+function refreshLogs() {
+    window.location.reload();
+}
+
+// Auto-refresh logs every 30 seconds
+setInterval(refreshLogs, 30000);
+</script>
+{% endblock %}
+

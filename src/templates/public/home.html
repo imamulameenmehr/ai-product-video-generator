@@ -1,0 +1,190 @@
+{% extends "public/base.html" %}
+
+{% block title %}VideoGen - AI-Powered Product Video Generator{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative overflow-hidden min-h-screen flex items-center">
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 relative z-10">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                Transform Your Products Into
+                <span class="block bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                    Stunning Videos
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
+                Upload a product image, add a description, and watch AI create professional marketing videos in minutes.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/static/index.html" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                    <i class="fas fa-play mr-2"></i>
+                    Generate Video Now
+                </a>
+                <a href="#demo" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300">
+                    <i class="fas fa-eye mr-2"></i>
+                    Watch Demo
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Animated Background Elements -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-16 h-16 bg-white/10 rounded-full animate-pulse animation-delay-1000"></div>
+    <div class="absolute top-1/2 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse animation-delay-500"></div>
+    <div class="absolute top-1/3 right-1/3 w-8 h-8 bg-white/10 rounded-full animate-pulse animation-delay-2000"></div>
+</section>
+
+<!-- Features Preview -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Why Choose VideoGen?
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Powerful AI technology meets intuitive design to deliver professional results every time.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="text-center card-hover bg-gray-50 p-8 rounded-xl">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-magic text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">AI-Powered Generation</h3>
+                <p class="text-gray-600">
+                    Advanced AI algorithms analyze your product images and create engaging video content automatically.
+                </p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="text-center card-hover bg-gray-50 p-8 rounded-xl">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-clock text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Lightning Fast</h3>
+                <p class="text-gray-600">
+                    Generate professional product videos in minutes, not hours. Perfect for busy marketers and creators.
+                </p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="text-center card-hover bg-gray-50 p-8 rounded-xl">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-palette text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Professional Quality</h3>
+                <p class="text-gray-600">
+                    High-quality output suitable for social media, websites, and professional marketing campaigns.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                How It Works
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Three simple steps to create amazing product videos
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Step 1 -->
+            <div class="text-center">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto">
+                        <span class="text-2xl font-bold text-white">1</span>
+                    </div>
+                    <div class="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gray-300 -z-10"></div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Upload Your Product Image</h3>
+                <p class="text-gray-600">
+                    Simply drag and drop or select your product image. We support all common formats.
+                </p>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="text-center">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto">
+                        <span class="text-2xl font-bold text-white">2</span>
+                    </div>
+                    <div class="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gray-300 -z-10"></div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Add Product Details</h3>
+                <p class="text-gray-600">
+                    Provide a brief description of your product to help our AI understand the context.
+                </p>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="text-center">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto">
+                        <span class="text-2xl font-bold text-white">3</span>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Download Your Video</h3>
+                <p class="text-gray-600">
+                    Watch the magic happen as AI creates your video, then download and share it anywhere.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section id="demo" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                See It In Action
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Watch how easy it is to create professional product videos
+            </p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                <div class="aspect-video bg-gray-800 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-play text-white text-2xl"></i>
+                        </div>
+                        <p class="text-white text-lg">Demo Video Coming Soon</p>
+                        <p class="text-gray-400">Experience the power of AI video generation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 gradient-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to Transform Your Products?
+        </h2>
+        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Join thousands of creators and marketers who are already using VideoGen to create stunning product videos.
+        </p>
+        <a href="/static/index.html" class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg inline-block">
+            <i class="fas fa-rocket mr-2"></i>
+            Generate Video Now - It's Free
+        </a>
+    </div>
+</section>
+{% endblock %}
+
